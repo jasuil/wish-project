@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="custom3">
+
+<select id="search_left" resultType='domain.customVO'>
+select  busi_num,  custom from custom  
+WHERE busi_num like CONCAT('%',#{busi_num},'%') or
+custom like CONCAT('%',#{custom},'%')
+</select>
+
+<select id="search_one_c" resultType='domain.customVO'>
+select * from custom 
+where 
+custom=#{custom} or busi_num=#{busi_num}
+</select>
+
+<select id="search_one_a" resultType='domain.accountVO'>
+select * from account
+where 
+busi_num=#{busi_num}
+</select>
+
+<select id="search_post" resultType='domain.customVO'>
+select post as post_num, add1 as addr1
+from adress
+where add1 like CONCAT('%',#{addr1},'%')
+</select>
+
+<select id="search_country" resultType='domain.customVO'>
+select country_eng, country_kor
+from country
+where
+country_kor like CONCAT('%',#{country_kor},'%')
+</select>
+
+<insert id="input">
+insert into custom values(#{busi_num},#{custom},#{Short},#{ceo},#{charge_person},
+#{busi_condition},#{item},#{post_num},#{addr1},#{addr2},
+#{tel},#{fax},#{homepage},#{co_yn},#{foreign_yn},
+#{tax_yn},#{country_eng},#{country_kor},#{special_relation},#{trade_stop},
+#{contract_period_s},#{contract_period_e},#{regi_info_man},#{regi_info_date},
+#{modi_info_man},
+#{modi_info_date})
+</insert>
+
+<select id='te' resultType="String">
+select 12 from dual;
+</select>
+ 
+ <select id="t" resultType='int'>
+ select 12  from dual
+ </select>
+</mapper>

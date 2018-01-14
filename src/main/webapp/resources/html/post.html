@@ -1,0 +1,78 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+	<script  src="/c/resources/jquery/jquery.min.js"></script>
+</head>
+<body>
+	주소를 입력하세요<br/>
+	<input type='text' id='addr1_search'>
+	<button id='addr1_button' onclick='try_addr()'>찾기</button>
+	<button class='close' onclick='window.close()' >닫기</button>	
+		<div id="post_list">
+		
+		</div>	
+<script>
+
+function try_addr(){
+	var addr1=$('#addr1_search').val();
+	alert("try_addr"+addr1);
+	//document.location='/c/left-get?addr1='+addr1+"&searches=addr";
+	
+	 $.ajax({
+			type:'post',
+			url:'/c/json/post',
+			headers: { 
+			      "Content-Type": "application/json",
+			      "X-HTTP-Method-Override": "POST" },
+			dataType:'JSON',
+			data: JSON.stringify({addr1: addr1}),
+			success:function(data){
+				alert("get"+data);
+				//템플릿형태로 보여준다
+				HTMLData(data, $("#post_list"), $('#post-template'),"#post-table");
+				
+				
+			},
+			error:function(data){
+				$("#left_down").html('error '+data);
+			}
+	 }); 
+}
+
+var HTMLData = function(replyArr, target, templateObject, removeObject) {
+
+	var template = Handlebars.compile(templateObject.html());
+
+	var html = template(replyArr);
+	$(removeObject).remove();
+	target.after(html);
+
+}
+
+//우편번호 새 창이 뜰 때 opener.document.all.text1.value = document.all.text2.value;
+$(document).on("dblclick", ".post-data", function() {
+	  var Id1 = $(this).children('td:eq(0)').text();
+	    var Id2 = $(this).children('td:eq(1)').text();
+
+	    alert(Id1+"=Id1 : Id2="+Id2);
+	    
+	    opener.document.all.post_num.value = Id1;
+	    opener.document.all.addr1.value = Id2;
+	  	  
+});
+</script>
+<script id="post-template" type="text/x-handlebars-template">
+<table id='post-table' border=1>
+	<tr>
+		<td>우편번호</td><td>주소</td>
+	</tr>
+{{#each .}}
+	<tr class='post-data'>
+		<td>{{post_num}}</td><td>{{addr1}}</td>
+	</tr>
+{{/each}}
+</table>
+</script>
+</body>
+</html>

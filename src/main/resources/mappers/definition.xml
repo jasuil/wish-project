@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="definition">
+ 
+<update id='tbl_board'>
+---------------------사실 아래 것들은 sqlplus, oracle developer에서 실행하려고 만든 것임 
+create table tbl_board (bno int, title varchar2(100), content varchar2(4000), writer varchar2(100), regdate date, 
+viewcnt int, replycnt int, constraint pk_bno primary key(bno))
+alter table tbl_board modify(regdate date default sysdate) //일부로 이렇게 해봤음
+
+
+begin
+for n in 1.. 1001 loop
+insert into tbl_board (bno,title,content,writer, viewcnt)
+values (n, 't'|| n, 'c'||n,'w'||n, 0);
+end loop;
+end;
+/
+
+create unique index bno_idx on tbl_board (bno); //이미 주키가 설정되어 있으므로 할 필요없음
+
+--댓글
+create table tbl_reply (rno int, bno int, replytext varchar(1000), replyer varchar(50), regdate date
+default sysdate, updatedate date default sysdate, 
+constraint fk_rno foreign key(bno) references tbl_board(bno) )
+
+--로그인
+create table tbl_user(id varchar(50) not null,
+pw varchar2(50) not null, name varchar2(100) not null,
+point int default 0,
+constraint pk_id primary key(id))
+
+insert into tbl_user (id,pw,name) values ('jasuil','1212','성일짱') 
+
+---------------mysql
+drop table custom;
+create table custom ( busi_num varchar2(40) not null primary key,
+custom varchar2(40) not null, abbreviation varchar2(40),
+ceo varchar2(20), charge_person varchar2(20), busi_condition varchar2(20),
+item varchar2(20), post_num varchar2(20),
+addr1 varchar2(160), addr2 varchar2(160),
+tel varchar2(26), fax varchar2(26), homepage varchar2(40),
+co_yn varchar2(1), foreign_yn varchar2(1), tax_yn varchar2(1),
+country_eng varchar2(40), country_kor varchar2(40),
+special_relation varchar2(1),
+trade_stop varchar2(1),
+contract_period_s date,
+contract_period_e date,
+regi_info_man varchar2(40),
+regi_info_date date,
+modi_info_man varchar2(40),
+modi_info_date date);
+
+drop table account;
+create table account (busi_num varchar2(40) not null,
+factory varchar2(40),
+trade_bank varchar2(40), 
+account_num varchar2(40) primary key);
+
+insert into custom (busi_num, custom) 
+values('111-11-11111','롯데마트');
+
+insert into custom (busi_num, custom) 
+values('111-11-11112','이마트');
+
+insert into account values('111-11-11111', '청주공장','농협중앙회','123-123-1234567');
+
+
+select  busi_num,  custom from custom  
+WHERE busi_num like '%%' or
+custom like '%롯%';
+
+drop table adress;
+create table adress(post varchar2(5),add1 varchar2(200));
+insert into adress values ('12345','청주공장');
+insert into adress values ('67890','서울공장');
+
+drop table country;
+create table country(country_eng char(40), country_kor char(40));
+insert into country values('KOR','대한민국');
+insert into country values('TWN','대만');
+commit;
+</update>
+
+<select id="constraints">
+select * from user_cons_columns where table_name like '%TBL%';
+select * from user_constraints where table_name like '%TBL%'; --제약사항
+
+--참고용
+<!-- select case when regdate >=sysdate then '1'
+when regdate<sysdate then '2'
+end as crit
+from tbl_reply where rno=17;
+
+select * from tbl_reply where regdate< sysdate;
+select rno,bno,to_char(regdate, 'yyyy/mm/dd amhh:mi:ss') from tbl_reply; -->
+</select>
+
+</mapper>

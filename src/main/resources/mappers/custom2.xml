@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="custom">
+
+<select id="search_left" resultType='domain.customVO'>
+select  busi_num,  custom from custom  
+WHERE busi_num like '%' || #{busi_num} || '%' or
+custom like '%' || #{custom} || '%'
+</select>
+
+<select id="select" resultType='domain.customVO'>
+select * from custom where busi_num = #{busi_num} or custom = #{custom}
+</select>
+
+<select id="search_one_c" resultType='domain.customVO'>
+select * from custom 
+where 
+custom=#{custom} or busi_num=#{busi_num}
+</select>
+
+<select id="search_one_a" resultType='domain.accountVO'>
+select * from account
+where 
+busi_num=#{busi_num}
+</select>
+
+<select id="search_post" resultType='domain.customVO'>
+select post as post_num, add1 as addr1
+from adress
+where add1 like '%' || #{addr1} || '%'
+</select>
+
+<select id="search_country" resultType='domain.customVO'>
+select country_eng, country_kor
+from country
+where
+country_kor like '%' || #{country_kor} || '%'
+</select>
+
+<select id="isExisted" parameterType='string' resultType='hashmap'>
+select * from custom where busi_num=#{busi_num}
+</select>
+
+<select id="accountIsExisted" parameterType='string' resultType='hashmap'>
+select * from account where account_num=#{account_num}
+</select>
+
+<update id="update">
+update custom set  
+busi_num = #{busi_num}, custom = #{custom}, abbreviation= #{abbreviation}, ceo= #{ceo}, 
+charge_person= #{charge_person},busi_condition= #{busi_condition}, item= #{item}, post_num= #{post_num}, 
+addr1= #{addr1},addr2= #{addr2},tel= #{tel}, fax= #{fax}, 
+homepage= #{homepage}, co_yn= #{co_yn}, foreign_yn= #{foreign_yn}, tax_yn= #{tax_yn}, 
+country_eng= #{country_eng},country_kor= #{country_kor}, 
+special_relation= #{special_relation}, trade_stop= #{trade_stop},
+contract_period_s= #{contract_period_s}, contract_period_e= #{contract_period_e}, 
+modi_info_man= #{modi_info_man}, modi_info_date= systimestamp
+where busi_num = #{busi_num}
+</update>
+
+<update id='update_account'>
+update account set
+busi_num=#{busi_num}, factory=#{factory}, trade_bank=#{trade_bank}, account_num=#{account_num}
+where account_num = #{account_num}
+</update>
+
+<insert id="input">
+insert into custom
+(busi_num,custom,abbreviation,ceo,charge_person,
+busi_condition,item,post_num,addr1,addr2,
+tel,fax,homepage,co_yn,foreign_yn,
+tax_yn,country_eng,country_kor,special_relation,trade_stop,
+contract_period_s,
+contract_period_e,
+regi_info_man,
+regi_info_date
+)
+
+values(#{busi_num},#{custom},#{abbreviation},#{ceo},#{charge_person},
+#{busi_condition},#{item},#{post_num},#{addr1},#{addr2},
+#{tel},#{fax},#{homepage},#{co_yn},#{foreign_yn},
+#{tax_yn},#{country_eng},#{country_kor},#{special_relation},#{trade_stop},
+to_date(#{contract_period_s},'yyyy/mm/dd'),
+to_date(#{contract_period_e},'yyyy/mm/dd'),
+#{regi_info_man},
+systimestamp
+)
+</insert>
+
+<insert id='input_account'>
+insert into account
+values
+(#{busi_num}, #{factory}, #{trade_bank}, #{account_num})
+</insert>
+
+<delete id="delete_custom">
+delete from custom where busi_num=#{busi_num}
+</delete>
+
+<delete id="delete_account"> <!-- 이것은 custom table의 레코드를 지울 경우 같이 삭제되도록 한 것이다. -->
+delete from account where busi_num=#{busi_num}
+</delete>
+
+<delete id='delete_account_alone'>
+delete from account where account_num=#{account_num}
+</delete>
+
+<select id='te' resultType="String">
+select 12 from dual;
+</select>
+ 
+ <select id="t" resultType='int'>
+ select 12  from dual
+ </select>
+</mapper>
