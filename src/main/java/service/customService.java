@@ -20,6 +20,10 @@ public interface customService {
 	public String isExisted(String busi_num);	
 	
 	public String accountisExisted(String account_num);
+	/**
+	 * 수정 또는 신규입력 둘 다 가능한 메소드임
+	 * @param vo
+	 */
 	public void insert_account(accountVO vo);
 	public String delete_account_alone(String account_num);
 	public String update_account(accountVO vo);

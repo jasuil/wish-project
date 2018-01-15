@@ -369,17 +369,17 @@ $(function()
 	</tr>
 	<tr class='account-empty-data'>
 		<td>
-		<input type='text' name='factory' id='factory' title='변경한 사람'  maxlength='20'>
+		<input type='text' name='factory' id='factory' title='사무소'  maxlength='20'>
 		</td>
 		<td>
-		<input type='text' name='trade_bank' id='trade_bank' title='변경한 사람'  maxlength='20'>
+		<input type='text' name='trade_bank' id='trade_bank' title='은행'  maxlength='20'>
 		</td>
 		<td>
-		<input type='text' name='account_num' id='account_num' title='변경한 사람' maxlength='20'>
+		<input type='text' name='account_num' id='account_num' title='계좌정보' maxlength='20'>
 		</td>
-		<td>
+	<!-- 	<td>
 		<button id='account_save'>저장하기</button><button id='account_delete'>삭제하기</button>
-		</td>
+		</td> -->
 	</tr>
 	</table>
 	<div id='account'>입력된 정보가 아직 없습니다.</div>
@@ -477,12 +477,12 @@ $(function()
 		<td>
 		<input type='text' name='account_num' id='account_num' title='변경한 사람' value='{{account_num}}' maxlength='20'>
 		</td>
-		<td>
+		<!--<td>
 		<button id='account_save'>저장하기</button><button id='account_delete'>삭제하기</button>
-		</td>
+		</td>-->
 	</tr>
 {{/each}}
-	<tr class='account-empty-data'>
+<!--	<tr class='account-empty-data'>
 	<td>
 		<input type='text' name='factory' id='factory' title='변경한 사람'  maxlength='20'>
 		</td>
@@ -495,7 +495,7 @@ $(function()
 		<td>
 		<button id='account_save'>추가하기</button>
 		</td>
-	</tr>
+	</tr>-->
 </table>
 </script>
 
@@ -514,9 +514,9 @@ $(function()
 		<td>
 		<input type='text' name='account_num' id='account_num' title='변경한 사람' maxlength='20'>
 		</td>
-		<td>
+	<!--	<td>
 		<button id='account_save'>추가하기</button>
-		</td>
+		</td>-->
 	</tr>
 </table>
 </script>
@@ -846,6 +846,7 @@ $(document).on("dblclick", ".post-data", function() {
 	  $('#post_num').val(Id1);
 	  $('#addr1').val(Id2);
 	  $('#post_select').hide();
+	  $('#background').fadeOut();	  
 });
 
 var winObject = null;
@@ -1052,6 +1053,9 @@ function list_go2(whatType){
 				contract_period_e:  $("#contract_period_e").val(),
 				regi_info_man: $('#regi_info_man').val(),
 				modi_info_man: $('#modi_info_man').val(),
+				factory: $('#factory').val(),
+				trade_bank: $('#trade_bank').val(),
+				account_num: $('#account_num').val(),
 				}),
 				success:function(data){
 					if(whatType == 'PUT')

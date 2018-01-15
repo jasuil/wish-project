@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import domain.accountVO;
+import domain.companyVO;
 import domain.customVO;
 import service.customService;
 
@@ -115,14 +116,26 @@ public class jsonController {
 		return entity;
 	}
 
+	//정보수정
 	@RequestMapping(value = "/input", method = RequestMethod.PATCH)
-	public ResponseEntity<String> homePatch(@RequestBody customVO vo) {
+	public ResponseEntity<String> homePatch(@RequestBody companyVO vo) {
 		 logger.info("homePatch {}", vo);
 			
 		 ResponseEntity<String> entity  = null;
+		 
+		 //계좌정보를 따로 분리하여 테이블에 넣어주도록 한다.
+		 accountVO aVo = new accountVO();
+		 aVo.setFactory(vo.getFactory());
+		 aVo.setBusi_num(vo.getBusi_num());
+		 aVo.setAccount_num(vo.getAccount_num());
+		 aVo.setTrade_bank(vo.getTrade_bank());
+		 
 		 try{
 			 Thread.sleep(1000);
+			 
 			 serv.update(vo);
+			 serv.insert_account(aVo);
+			 
 			 entity = new ResponseEntity<>("good", HttpStatus.OK);
 		 }catch(Exception e){
 			 e.printStackTrace();
@@ -132,15 +145,27 @@ public class jsonController {
 		return entity;
 	}
 	
+	//정보입력
 	@RequestMapping(value = "/input", method = RequestMethod.PUT)
-	public ResponseEntity<String> homePut(@RequestBody customVO vo) {
+	public ResponseEntity<String> homePut(@RequestBody companyVO vo) {
 				
 		 logger.info("input Put {}", vo);
 		
 		 ResponseEntity<String> entity  = null;
+		 
+		 //계좌정보를 따로 분리하여 테이블에 넣어주도록 한다.
+		 accountVO aVo = new accountVO();
+		 aVo.setFactory(vo.getFactory());
+		 aVo.setBusi_num(vo.getBusi_num());
+		 aVo.setAccount_num(vo.getAccount_num());
+		 aVo.setTrade_bank(vo.getTrade_bank());
+		 
 		 try{
 			 Thread.sleep(1000);
+			 
 			 serv.insert(vo);
+			 serv.insert_account(aVo);
+			 
 			 entity = new ResponseEntity<>("good", HttpStatus.OK);
 		 }catch(Exception e){
 			 e.printStackTrace();

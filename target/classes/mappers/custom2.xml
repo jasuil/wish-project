@@ -63,7 +63,7 @@ where busi_num = #{busi_num}
 <update id='update_account'>
 update account set
 busi_num=#{busi_num}, factory=#{factory}, trade_bank=#{trade_bank}, account_num=#{account_num}
-where account_num = #{account_num}
+where busi_num = #{busi_num}
 </update>
 
 <insert id="input">
@@ -89,10 +89,19 @@ systimestamp
 )
 </insert>
 
+<!-- 삽입 또는 수정을 동시에 넣었다 -->
 <insert id='input_account'>
-insert into account
-values
-(#{busi_num}, #{factory}, #{trade_bank}, #{account_num})
+MERGE INTO account
+            USING DUAL
+            ON (busi_num = #{busi_num})
+            WHEN MATCHED THEN
+                      UPDATE SET
+                            factory = #{factory},
+                            trade_bank = #{trade_bank},
+                            account_num = #{account_num}
+            WHEN NOT MATCHED THEN
+                      INSERT (busi_num, factory, trade_bank, account_num) 
+                                 VALUES (#{busi_num}, #{factory}, #{trade_bank}, #{account_num})
 </insert>
 
 <delete id="delete_custom">
