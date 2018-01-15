@@ -46,7 +46,7 @@ insert into custom values(#{busi_num},#{custom},#{Short},#{ceo},#{charge_person}
 </insert>
 
 <select id='te' resultType="String">
-select 12 from dual;
+select 12 from dual
 </select>
  
  <select id="t" resultType='int'>
